@@ -345,27 +345,31 @@ class Snake{
         }
     }
     gameOver(){
-        var msg = Div({id: "game-over"});
-        msg.style.textAlign = "center";
+        window.msg = Div({id: "game-over"});
+        window.msg.style.textAlign = "center";
         var tn = document.createElement("text");
         tn.innerText = "Game Over\n";
         tn.style.fontSize = "24px";
         var btn = document.createElement("button");
         btn.innerText = "Try Again";
-        msg.append(tn, btn);
-        document.body.append(msg);
-        btn.addEventListener("click", ()=>{
-            this.destroy();
-            window.grid.destroy();
-            msg.remove();
-            this.scoreEl.remove(); // remove score.
-            window.grid = new Grid(11);
-            document.body.append(window.grid.elWrapper);
-            window.snake = new Snake(window.grid); // start over
-            window.snake.movingHandlerId = setInterval((e)=>{window.snake.move();}, FPS); // start it!
-        }, false);
+        window.msg.append(tn, btn);
+        document.body.append(window.msg);
+        btn.addEventListener("click", window.reset, false);
+        window.gameOver = true;
     }
 }
+
+window.reset = function(){
+    window.snake.destroy();
+    window.grid.destroy();
+    window.msg.remove();
+    window.snake.scoreEl.remove();
+    window.grid = new Grid(11);
+    document.body.append(window.grid.elWrapper);
+    window.snake = new Snake(window.grid); // start over
+    window.snake.movingHandlerId = setInterval(()=>{window.snake.move();}, FPS); // start it!
+    window.gameOver = false;
+};
 
 window.grid = new Grid(11);
 document.body.append(window.grid.elWrapper);
